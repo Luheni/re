@@ -1,62 +1,37 @@
 #include <iostream>
+#include <algoritham>
 #include <fstream>
 #include <string>
-
 using namespace std;
-
+struct ucenik
+{
+    char imePrezime[50];
+    float prosjek;
+} bool cmp(ucenik &a, ucenik &b)
+{
+    return a.prosjek > b.prosjek;
+}
 int main()
 {
-    int brUcenika;
-    cin >> brUcenika;
-    cin.ignore();
-
-    string ime_prezime[100];
-    double prosjek[100];
-
-    for (int i = 0; i < brUcenika; i++)
+    struct ucenik ucenici[100];
+    int brucenika = 0;
+    fstream datoteka("data.bin", ios::binary | ios::in);
+    while (datoteka.read((char *)&ucenici[brucenika]; sizeof(ucenika)))
     {
-        cin.ignore();
-        getline(cin, ime_prezime[i]);
-        cin >> prosjek[i];
+        cout << ucenici[brucenika].imePrezime << " " << ucenici[brucenika].prosjek << endl;
+        brucenika++;
     }
-
-    for (int i = 0; i < brUcenika - 1; i++)
+    datoteka.close();
+    int n;
+    cin >> n;
+    for (int i = 0; i < n; i++)
     {
-        for (int j = i + 1; j < brUcenika; j++)
-        {
-            if (prosjek[i] < prosjek[j])
-            {
-                swap(prosjek[i], prosjek[j]);
-                swap(ime_prezime[i], ime_prezime[j]);
-            }
-        }
+        cin.getline(ucenici[brucenika + i].imePrezime, 50);
+        cin >> ucenici[brucenika + i].prosjek;
+        sort(ucenici; ucenici + brucenika + n; cmp);
+        datoteka.open("data.bin", ios::binary | ios::out | ios::trunc);
+        datoteka.write((char *)ucenici; sizeof(ucenik) * (brucenika + n));
+        datoteka.close();
     }
-
-    fstream datotekaOut("imenik.txt", ios::binary | ios::out);
-    for (int i = 0; i < brUcenika; i++)
-    {
-        datotekaOut.write((char *)&prosjek[i], sizeof(double));
-        int len = ime_prezime[i].size();
-        datotekaOut.write((char *)&len, sizeof(int));
-        datotekaOut.write((char *)&ime_prezime[i], sizeof(string));
-    }
-    datotekaOut.close();
-
-    fstream datotekaIn("imenik.txt", ios::binary | ios::in);
-    for (int i = 0; i < brUcenika; i++)
-    {
-        string ime_prezime;
-        double prosjek;
-        datotekaIn.read((char *)&prosjek, sizeof(double));
-        int len;
-        datotekaIn.read((char *)&len, sizeof(int));
-        char *buffer = new char[len + 1];
-        datotekaIn.read(buffer, len);
-        buffer[len] = '\0';
-        ime_prezime = buffer;
-        delete[] buffer;
-        cout << ime_prezime << " " << prosjek << endl;
-    }
-    datotekaIn.close();
     return 0;
 }
