@@ -1,5 +1,5 @@
 #include <iostream>
-#include <algoritham>
+#include <algorithm>
 #include <fstream>
 #include <string>
 using namespace std;
@@ -12,7 +12,7 @@ struct ucenik
     return a.prosjek > b.prosjek;
 }
 int main()
-{
+{ 
     struct ucenik ucenici[100];
     int brucenika = 0;
     fstream datoteka("data.bin", ios::binary | ios::in);
